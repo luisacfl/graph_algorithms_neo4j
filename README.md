@@ -2,6 +2,9 @@
 Exercises found on Graph Algorithms by O'Reilly.
 
 # Chapter 4 - Pathfinding and Graph Search Algorithms
+OS:
+Neo4J version:
+Library:
 
 From https://github.com/neo4j-graph-analytics/book/tree/master/data download transport-nodes.csv and transport-relationships.csv. When downloaded, remove the " character in order to be able to import the data and place those files in '/Neo4j Desktop/Application/neo4jDatabases/import/' folder.
 
