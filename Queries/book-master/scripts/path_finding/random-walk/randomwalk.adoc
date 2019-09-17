@@ -1,0 +1,12 @@
+// tag::neo4j-results[]
++-------------+
+| place       |
++-------------+
+| "London"    |
+| "Doncaster" |
+| "Immingham" |
+| "Amsterdam" |
+| "Utrecht"   |
+| "Amsterdam" |
++-------------+
+// end::neo4j-results[]
