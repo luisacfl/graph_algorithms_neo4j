@@ -2,9 +2,9 @@
 Exercises found on Graph Algorithms by O'Reilly.
 
 # Chapter 4 - Pathfinding and Graph Search Algorithms
-OS:
-Neo4J version:
-Library:
+OS: Mac OS Sierra 10.12.6 
+Neo4J version: Versión 1.2.1 (1.2.1.1042)
+Library: Graph Algorithms 3.5.6.1 and APOC 3.5.0.4
 
 From https://github.com/neo4j-graph-analytics/book/tree/master/data download transport-nodes.csv and transport-relationships.csv. When downloaded, remove the " character in order to be able to import the data and place those files in '/Neo4j Desktop/Application/neo4jDatabases/import/' folder.
 
