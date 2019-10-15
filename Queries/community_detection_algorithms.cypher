@@ -124,14 +124,32 @@ collect(algo.getNodeById(nodeId).id) AS libraries ORDER BY size(libraries) DESC
 //example: understanding consensus in social communities
 
 //-----Louvain Modularity for looking at grouping quality and hierarchies
-//input: The node label to load from the graph and The relationship type to load from the graph
-//output: the nodes and the communities a node falls into at two levels.
-//example: analyzing citation networks 
-
+//used to find communities in vast networks. Heurisitic.
+//example: uncovering different levels of hierarchy as in a criminal organizaction
+    //find subcommunities within subcommunities 
+    //extracting topics from online social platforms
+    //“Topic Modeling Based on Louvain Method in Online Social Networks”.
+    //“Hierarchical Modularity in Human Brain Functional Networks”
 //Find clusters by moving nodes into higher relationship density groups and aggregating into supercommunities.
 //Maximizes the presumed accuracy of groupings by comparing relationship weights and densities to a de ned estimate or average
+//Problems: the algorithms can overlook small communities within large networks.
 
-CALL algo.labelPropagation.stream("Library", "DEPENDS_ON",
-      { iterations: 10, direction: "BOTH" })
-YIELD nodeId, label RETURN label,
-collect(algo.getNodeById(nodeId).id) AS libraries ORDER BY size(libraries) DESC
+//input: The node label to load from the graph and The relationship type to load from the graph
+//output: the nodes and the communities a node falls into at two levels.
+CALL algo.louvain.stream("Library", "DEPENDS_ON")
+YIELD nodeId, communities
+RETURN algo.getNodeById(nodeId).id AS libraries, communities
+
+//store the resulting communities using the streaming version of the algorithm
+CALL algo.louvain.stream("Library", "DEPENDS_ON") YIELD nodeId, communities
+WITH algo.getNodeById(nodeId) AS node, communities SET node.communities = communities
+
+//find the final clusters.
+MATCH (l:Library)
+RETURN l.communities[-1] AS community, collect(l.id) AS libraries 
+ORDER BY size(libraries) DESC
+
+//intermediate clustering
+MATCH (l:Library)
+RETURN l.communities[0] AS community, collect(l.id) AS libraries 
+ORDER BY size(libraries) DESC
