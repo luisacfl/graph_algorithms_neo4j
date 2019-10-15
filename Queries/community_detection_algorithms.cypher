@@ -100,11 +100,38 @@ RETURN setId, collect(algo.getNodeById(nodeId)) AS libraries ORDER BY size(libra
              //They look for immediate neighbors as targets to spread
              //If no conflict, the label spreads
              //the places where it spreads become new seeds
-//PULL method: 
+//PULL method: Pulls labels from neighbors based on relationship weights to find clusters.
+        //each node is initalized witha  unique label
+        //labels propagate through the network
+        //nodes are shuffled for processing order and each node considers its direct neighbors' labels 
+        //Nodes acquire the label matching the total highest relationship weights.
+        //this continues until all nodes have updated their labels.
 
+//input: The node label to load from the graph and The relationship type to load from the graph
+//output: id of each set and the libraries that belong to that set
+//example: finding not so obvious communities.
+CALL algo.labelPropagation.stream("Library", "DEPENDS_ON",
+      { iterations: 10 })
+YIELD nodeId, label RETURN label,
+collect(algo.getNodeById(nodeId).id) AS libraries
+
+//for undirected graphs
+CALL algo.labelPropagation.stream("Library", "DEPENDS_ON",{ 
+    iterations: 10, 
+    direction: "BOTH" }).
+YIELD nodeId, label RETURN label,
+collect(algo.getNodeById(nodeId).id) AS libraries ORDER BY size(libraries) DESC
 //example: understanding consensus in social communities
 
 //-----Louvain Modularity for looking at grouping quality and hierarchies
+//input: The node label to load from the graph and The relationship type to load from the graph
+//output: the nodes and the communities a node falls into at two levels.
+//example: analyzing citation networks 
+
 //Find clusters by moving nodes into higher relationship density groups and aggregating into supercommunities.
 //Maximizes the presumed accuracy of groupings by comparing relationship weights and densities to a de ned estimate or average
 
+CALL algo.labelPropagation.stream("Library", "DEPENDS_ON",
+      { iterations: 10, direction: "BOTH" })
+YIELD nodeId, label RETURN label,
+collect(algo.getNodeById(nodeId).id) AS libraries ORDER BY size(libraries) DESC
